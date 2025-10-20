@@ -1,12 +1,15 @@
 //https://github.com/musman65/Lab_07
 import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.PathTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -83,32 +86,81 @@ public class Main extends Application {
         path4.setPath(qm);
         path4.setNode(a);
         
-        path1.setOnFinished(event -> path2.play());
-        path2.setOnFinished(event -> path3.play());
-        path3.setOnFinished(event -> path4.play());
+        FadeTransition ftrans = new FadeTransition(Duration.millis(2000), b);
+        ftrans.setFromValue(1);
+        ftrans.setToValue(0.25);
         
-        a.setOnMouseClicked(event -> path1.play());
+        ScaleTransition strans = new ScaleTransition(Duration.millis(1000), b);
+        strans.setToX(2);
+        strans.setToY(1.5);
+        
+        RotateTransition rtrans = new RotateTransition(Duration.millis(2000), b);
+        rtrans.setFromAngle(0);
+        rtrans.setToAngle(180);
+        
+        TranslateTransition ttrans = new TranslateTransition(Duration.millis(1000), b);
+        ttrans.setToX(100);
+        
+//        ftrans.setOnFinished(event -> b.setOpacity(1));
+//        strans.setOnFinished(event -> {
+//            b.setScaleX(1);
+//            b.setScaleY(1);
+//        });
+//        ttrans.setOnFinished(event -> {
+//            b.setLayoutX(-100);
+//            b.setLayoutY(0);
+//        });
+        
+        path1.setOnFinished(event -> {path2.play(); strans.play();});
+        path2.setOnFinished(event -> {path3.play(); rtrans.play();});
+        path3.setOnFinished(event -> {path4.play(); ttrans.play();});
         
         start.setOnMouseClicked(event -> {
             if ((!path1.getStatus().equals(Animation.Status.RUNNING)) && (!path2.getStatus().equals(Animation.Status.RUNNING)) && (!path3.getStatus().equals(Animation.Status.RUNNING)) && (!path4.getStatus().equals(Animation.Status.RUNNING))) {
+                b.setScaleX(1);
+                b.setScaleY(1);
+                b.setRotate(0);
+                b.setTranslateX(0);
+                b.setTranslateY(0);
                 path1.play();
+                ftrans.play();
             }
         });
         
         reset.setOnMouseClicked(event -> {
             path1.stop();
+            ftrans.stop();
             path2.stop();
+            strans.stop();
             path3.stop();
+            rtrans.stop();
             path4.stop();
+            ttrans.stop();
+            b.setScaleX(1);
+            b.setScaleY(1);
+            b.setRotate(0);
+            b.setTranslateX(0);
+            b.setTranslateY(0);
             
             path1.play();
+            ftrans.play();
         });
         
         exit.setOnMouseClicked(event -> {
             path1.stop();
+            ftrans.stop();
             path2.stop();
+            strans.stop();
             path3.stop();
+            rtrans.stop();
             path4.stop();
+            ttrans.stop();
+            b.setOpacity(1);
+            b.setScaleX(1);
+            b.setScaleY(1);
+            b.setRotate(0);
+            b.setTranslateX(0);
+            b.setTranslateY(0);
         });
         
         
